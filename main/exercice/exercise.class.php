@@ -3713,14 +3713,12 @@ class Exercise
      */
     function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
     {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
-            return null;
-        }
         // Email configuration settings
         $courseCode     = api_get_course_id();
-        $course_info    = api_get_course_info($courseCode);
+        $courseInfo    = api_get_course_info($courseCode);
+		$sessionId 		= api_get_session_id();
 
-        $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
+        $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq2().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
         $msg = '<p>'.get_lang('OpenQuestionsAttempted').' :</p>
@@ -3766,22 +3764,22 @@ class Exercise
                     <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
             $msg .= '</table><br />';
-
-
-            $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
+			
+			$msg1   = str_replace("#exercise#",    $this->exercise, $msg);
             $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
             $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
             $msg    = str_replace("#mail#",        $user_info['email'],$msg1);
-            $msg    = str_replace("#course#",      $course_info['name'],$msg1);
+            $msg1    = str_replace("#course#",     $courseInfo['name'],$msg);
 
-            if ($origin != 'learnpath') {
-                $msg .= get_lang('ClickToCommentAndGiveFeedback').', <br />
+            $msg1 .= get_lang('ClickToCommentAndGiveFeedback').', <br />
                             <a href="#url#">#url#</a>';
-            }
-            $msg1 = str_replace("#url#", $url_email, $msg);
-            $mail_content = $msg1;
-            $subject = get_lang('OpenQuestionsAttempted');
 
+            $msg = str_replace("#url#", $url_email, $msg1);
+            $mail_content = $msg;
+            $subject1 = get_lang('OpenQuestionsAttempted').' in cursus #course#';
+			$subject = str_replace("#course#",     $courseInfo['name'],$subject1);
+
+			$teachers = array();
             if (api_get_session_id()) {
                 $teachers = CourseManager::get_coach_list_from_course_code($courseCode, api_get_session_id());
             } else {
@@ -3802,9 +3800,6 @@ class Exercise
 
     function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id)
     {
-        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
-            return null;
-        }
         // Email configuration settings
         $courseCode     = api_get_course_id();
         $course_info    = api_get_course_info($courseCode);
