@@ -8,7 +8,7 @@
  * 	@author Denes Nagy, HotPotatoes integration
  * 	@author Wolfgang Schneider, code/html cleanup
  * 	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
- * Modified by hubert.borderiou (question category)
+ * Modified by hubert.borderiou (question category) fix
  */
 
 // name of the language file that needs to be included
