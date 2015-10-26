@@ -10,7 +10,9 @@
  * @todo small letters for table variables
  *
  */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 
 use \ChamiloSession as Session;
@@ -45,16 +47,16 @@ $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTE
 // General parameters passed via POST/GET
 if ($debug) { error_log('Entered exercise_result.php: '.print_r($_POST,1)); }
 
-if (empty($formSent)) {            $formSent       = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null; }
-if (empty($exerciseResult)) {      $exerciseResult = isset($_SESSION['exerciseResult']) ? $_SESSION['exerciseResult'] : null; }
-if (empty($questionId)) {          $questionId     = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;}
-if (empty($choice)) {              $choice         = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;}
-if (empty($questionNum)) {         $questionNum    = isset($_REQUEST['num']) ? $_REQUEST['num'] : null;}
-if (empty($nbrQuestions)) {        $nbrQuestions   = isset($_REQUEST['nbrQuestions']) ? $_REQUEST['nbrQuestions'] : null;}
-if (empty($questionList)) {        $questionList   = isset($_SESSION['questionList']) ? $_SESSION['questionList'] : null;}
-if (empty($objExercise)) {         $objExercise    = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;}
-if (empty($exeId)) {               $exeId          = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;}
-if (empty($action)) {              $action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;}
+if ( empty ( $formSent ) ) {            $formSent       = $_REQUEST['formSent']; }
+if ( empty ( $exerciseResult ) ) {      $exerciseResult = $_SESSION['exerciseResult'];}
+if ( empty ( $questionId ) ) {          $questionId     = $_REQUEST['questionId'];}
+if ( empty ( $choice ) ) {              $choice         = $_REQUEST['choice'];}
+if ( empty ( $questionNum ) ) {         $questionNum    = $_REQUEST['num'];}
+if ( empty ( $nbrQuestions ) ) {        $nbrQuestions   = $_REQUEST['nbrQuestions'];}
+if ( empty ( $questionList ) ) {        $questionList   = $_SESSION['questionList'];}
+if ( empty ( $objExercise ) ) {         $objExercise    = $_SESSION['objExercise'];}
+if ( empty ( $exeId ) ) {               $exeId          = $_REQUEST['id'];}
+if ( empty ( $action ) ) {              $action         = $_REQUEST['action']; }
 
 $id = intval($_REQUEST['id']); //exe id
 
@@ -62,17 +64,12 @@ if (empty($id)) {
     api_not_allowed(true);
 }
 
-if (api_is_course_session_coach(
-    api_get_user_id(),
-    api_get_course_id(),
-    api_get_session_id()
-)) {
+if (api_is_course_session_coach(api_get_user_id(), api_get_course_id(), api_get_session_id())) {
     if (!api_coach_can_edit_view_results(api_get_course_id(), api_get_session_id())) {
         api_not_allowed(true);
     }
 }
 
-$maxEditors = isset($_configuration['exercise_max_fckeditors_in_page']) ? $_configuration['exercise_max_fckeditors_in_page'] : 0;
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
@@ -116,8 +113,8 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 $fromlink = '';
 
-$interbreadcrumb[]= array("url" => "exercice.php?".api_get_cidreq(),"name" => get_lang('Exercices'));
-$interbreadcrumb[]= array("url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),"name" => $objExercise->name);
+$interbreadcrumb[]= array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+$interbreadcrumb[]= array("url" => "overview.php?exerciseId=".$exercise_id.'&id_session='.api_get_session_id(),"name" => $objExercise->name);
 $interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
@@ -129,8 +126,6 @@ if ($origin != 'learnpath') {
 }
 ?>
 <script>
-var maxEditors = '<?php echo intval($maxEditors); ?>';
-
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
 	document.getElementById(marksid).style.display='block';
@@ -156,12 +151,8 @@ function getFCK(vals,marksid) {
 		var oHidden = document.createElement("input");
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
-        if (maxEditors == 0) {
-            oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-            oHidden.value = oEditor.GetXHTML(true);
-        } else {
-            oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
-        }
+		oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
+		oHidden.value = oEditor.GetXHTML(true);
 		f.appendChild(oHidden);
 	}
 }
@@ -172,38 +163,37 @@ $show_only_total_score  = false;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
-    // if the results_disabled of the Quiz is 1 when block the script
-    $result_disabled		= $track_exercise_info['results_disabled'];
+	// if the results_disabled of the Quiz is 1 when block the script
+	$result_disabled		= $track_exercise_info['results_disabled'];
 
-    if (!(api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) ) {
-        if ($result_disabled == 1) {
-            $show_results = false;
-            if ($origin != 'learnpath') {
-                echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	if (!(api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) ) {
+		if ($result_disabled == 1) {
+			//api_not_allowed();
+			$show_results = false;
+			//Display::display_warning_message(get_lang('CantViewResults'));
+			if ($origin != 'learnpath') {
+			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td colspan="2">';
-                Display::display_warning_message(
-                    get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>',
-                    false
-                );
-                echo '</td>
-                </tr>
-                </table>';
-            }
-        } elseif ($result_disabled == 2) {
-            $show_results = false;
-            $show_only_total_score = true;
-            if ($origin != 'learnpath') {
-                echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
+				echo '</td>
+				</tr>
+				</table>';
+			}
+		} elseif ($result_disabled == 2) {
+		    $show_results = false;
+		    $show_only_total_score = true;
+			if ($origin != 'learnpath') {
+			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td colspan="2">';
-                Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
-                echo '</td>
-                </tr>
-                </table>';
-            }
-        }
-    }
+				Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
+				echo '</td>
+				</tr>
+				</table>';
+			}
+		}
+	}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
 	$show_results = false;
@@ -230,23 +220,19 @@ $arrques = array();
 $arrans  = array();
 
 $user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
-$sql = "SELECT attempts.question_id, answer
-        FROM ".$TBL_TRACK_ATTEMPT." as attempts
-        INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices
-        ON stats_exercices.exe_id=attempts.exe_id
-        INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions
-        ON
-            quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND
-            quizz_rel_questions.question_id = attempts.question_id AND
-            quizz_rel_questions.c_id=".api_get_course_int_id()."
-        INNER JOIN ".$TBL_QUESTIONS." AS questions
-        ON
-            questions.id=quizz_rel_questions.question_id AND
-            questions.c_id = ".api_get_course_int_id()."
-        WHERE attempts.exe_id = ".intval($id)." $user_restriction
-		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
+$query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as attempts
+				INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices ON stats_exercices.exe_id=attempts.exe_id
+				INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions
+				    ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id
+				    AND quizz_rel_questions.question_id = attempts.question_id
+				    AND quizz_rel_questions.c_id=".api_get_course_int_id()."
+				INNER JOIN ".$TBL_QUESTIONS." AS questions
+				    ON questions.id=quizz_rel_questions.question_id
+				    AND questions.c_id = ".api_get_course_int_id()."
+		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
+		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 
-$result = Database::query($sql);
+$result = Database::query($query);
 
 $question_list_from_database = array();
 $exerciseResult = array();
@@ -260,11 +246,11 @@ while ($row = Database::fetch_array($result)) {
 if (!empty($track_exercise_info['data_tracking'])) {
 	$temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
-    // Getting question list from data_tracking
+    //Getting question list from data_tracking
     if (!empty($temp_question_list)) {
         $questionList = $temp_question_list;
     }
-    // If for some reason data_tracking is empty we select the question list from db
+    //If for some reason data_tracking is empty we select the question list from db
     if (empty($questionList)) {
         $questionList = $question_list_from_database;
     }
@@ -285,15 +271,11 @@ foreach ($questionList as $questionId) {
     $objQuestionTmp     = Question::read($questionId);
     $total_weighting  +=$objQuestionTmp->selectWeighting();
 }
-
 $counter = 1;
-$exercise_content = null;
-$category_list = array();
 
-$useAdvancedEditor = true;
-if (count($questionList) > $maxEditors) {
-    $useAdvancedEditor = false;
-}
+$exercise_content = null;
+
+$category_list = array();
 
 foreach ($questionList as $questionId) {
 
@@ -487,7 +469,7 @@ foreach ($questionList as $questionId) {
             }
 
             //showing the score
-            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = ".intval($id)." and question_id= ".intval($questionId)."";
+            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
             $resfree = Database::query($queryfree);
             $questionScore= Database::result($resfree,0,"marks");
             $totalScore+=$questionScore;
@@ -546,23 +528,7 @@ foreach ($questionList as $questionId) {
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
 			$comnt = get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
-
-            if ($useAdvancedEditor) {
-                $feedback_form->addElement(
-                    'html_editor',
-                    'comments_' . $questionId,
-                    null,
-                    null,
-                    array(
-                        'ToolbarSet' => 'TestAnswerFeedback',
-                        'Width' => '100%',
-                        'Height' => '120'
-                    )
-                );
-            } else {
-                $feedback_form->addElement('textarea', 'comments_' . $questionId);
-            }
-
+			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '100%', 'Height' => '120'));
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
 			$feedback_form->display();
@@ -610,17 +576,10 @@ foreach ($questionList as $questionId) {
     $my_total_score  = $questionScore;
 	$my_total_weight = $questionWeighting;
     $totalWeighting += $questionWeighting;
+
     $category_was_added_for_this_test = false;
 
     if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
-        if (!isset($category_list[$objQuestionTmp->category]['score'])) {
-            $category_list[$objQuestionTmp->category]['score'] = 0;
-        }
-
-        if (!isset($category_list[$objQuestionTmp->category]['total'])) {
-            $category_list[$objQuestionTmp->category]['total'] = 0;
-        }
-
         $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
         $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
         $category_was_added_for_this_test = true;
@@ -634,15 +593,7 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    // No category for this question!
-    if (!isset($category_list['none']['score'])) {
-        $category_list['none']['score'] = 0;
-    }
-
-    if (!isset($category_list['none']['total'])) {
-        $category_list['none']['total'] = 0;
-    }
-
+    //No category for this question!
     if ($category_was_added_for_this_test == false) {
         $category_list['none']['score'] += $my_total_score;
         $category_list['none']['total'] += $my_total_weight;
@@ -679,6 +630,7 @@ foreach ($questionList as $questionId) {
     $exercise_content .= $question_content;
 } // end of large foreach on questions
 
+
 $total_score_text = null;
 
 //Total score
@@ -696,10 +648,8 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 
 if (!empty($category_list) && ($show_results || $show_only_total_score)) {
     //Adding total
-    $category_list['total'] = array(
-        'score' => $my_total_score_temp,
-        'total' => $totalWeighting
-    );
+    $category_list['total'] = array('score' => $my_total_score_temp, 'total' => $totalWeighting);
+
     echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
 }
 
@@ -766,7 +716,7 @@ if ($origin != 'learnpath') {
 	}
 }
 
-// Destroying the session
+//destroying the session
 Session::erase('questionList');
 unset ($questionList);
 
