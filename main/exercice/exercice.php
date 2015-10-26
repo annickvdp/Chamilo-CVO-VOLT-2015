@@ -8,7 +8,7 @@
  * 	@author Denes Nagy, HotPotatoes integration
  * 	@author Wolfgang Schneider, code/html cleanup
  * 	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
- * Modified by hubert.borderiou (question category) fix
+ * Modified by hubert.borderiou (question category)
  */
 
 // name of the language file that needs to be included
@@ -692,17 +692,13 @@ if (!empty($exercise_list)) {
                     }
 
                     // Visible / invisible
-                    // Check if this exercise was added in a LP
-                    if ($exercise_obj->exercise_was_added_in_lp == true) {
-                        $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
-                    } else {
-                        if ($row['active'] == 0 || $visibility == 0) {
+                    if ($row['active'] == 0 || $visibility == 0) {
                             $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
                         } else {
                             // else if not active
                             $actions .= Display::url(Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
                         }
-                    }
+
                     // Export qti ...
                     $actions .= Display::url(Display::return_icon('export_qti2.png', 'IMS/QTI', '', ICON_SIZE_SMALL), 'exercice.php?choice=exportqti2&exerciseId='.$row['id'].'&'.api_get_cidreq());
                 } else {
@@ -765,8 +761,7 @@ if (!empty($exercise_list)) {
                     continue;
                 }
 
-                $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.
-                        $cut_title.'</a>';
+				$url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$cut_title.'</a>';
 
                 // Link of the exercise.
                 $item = Display::tag('td', $url.' '.$session_img);
@@ -959,7 +954,8 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
         } else {
             $active = 0;
         }
-        $title = GetQuizName($path, $documentPath);
+		
+		$title = GetQuizName($path, $documentPath);
         if ($title == '') {
             $title = basename($path);
         } else {
@@ -1008,7 +1004,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 );
 
                 $nbrActiveTests = $nbrActiveTests + 1;
-                $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.$userId.'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a>');
+                $item .= Display::tag('td', '<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.$userId.'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a>');
 
                 if (!empty($attempt)) {
                     $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
