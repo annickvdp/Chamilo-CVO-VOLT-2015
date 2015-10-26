@@ -734,7 +734,7 @@ class AnnouncementManager
                     if (!in_array("USER:" . $this_user['user_id'], $to_already_selected)) {
                         // $to_already_selected is the array containing the users (and groups) that are already selected
                         echo "<option value=\"USER:" . $this_user['user_id'] . "\" title='" . sprintf(get_lang('LoginX'), $this_user['username']) . "'>",
-                        "", api_get_person_name($this_user['firstname'], $this_user['lastname']),
+                        "", api_get_person_name($this_user['lastname'], $this_user['firstname']),
                         "</option>";
                     }
                 }

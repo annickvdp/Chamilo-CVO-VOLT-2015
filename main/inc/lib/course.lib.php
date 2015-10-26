@@ -1365,7 +1365,7 @@ class CourseManager
         $course_code = null,
         $session_id = 0,
         $limit = null,
-        $order_by = null,
+        $order_by = 'user.lastname, user.firstname',
         $filter_by_status = null,
         $return_count = null,
         $add_reports = false,
