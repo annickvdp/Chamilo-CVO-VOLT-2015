@@ -1,0 +1,4 @@
+Hier komen alle "fixes" waarbij geen aanpassingen aan de bestanden nodg waren
+(maar wel bijvoorbeeld een aanpassing aan de instellingen)
+
+fixes #5: een noreply adres toegevoegd
