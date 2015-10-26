@@ -1446,25 +1446,6 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
 
     return $url;
 }
-function api_get_cidreq2($addSessionId = true, $addGroupId = true)
-{
-    $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
-
-    if ($addSessionId) {
-        if (!empty($url)) {
-            $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
-        }
-    }
-
-    if ($addGroupId) {
-        if (!empty($url)) {
-            $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
-        }
-    }
-
-    return $url;
-}
-
 
 /**
  * Returns the current course info array see api_format_course_array()

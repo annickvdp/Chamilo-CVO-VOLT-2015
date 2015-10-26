@@ -228,7 +228,10 @@ if (isset($_REQUEST['comments']) &&
         $message .= '<h3>'.get_lang('CourseName').'</h3><p>'.Security::remove_XSS($course_info['name']).'';
         $message .= '<h3>'.get_lang('Exercise').'</h3><p>'.Security::remove_XSS($test);
 
-        $message .= '<p>'.get_lang('ClickLinkToViewComment').' <a href="#url#">#url#</a><br />';
+        //Only for exercises not in a LP
+        if ($lp_id == 0) {
+            $message .= '<p>'.get_lang('ClickLinkToViewComment').' <a href="#url#">#url#</a><br />';
+        }
 
         $message .= '<p>'.get_lang('Regards').'</p>';
         $message .= $from_name;
