@@ -1,4 +1,5 @@
-Hier komen alle "fixes" waarbij geen aanpassingen aan de bestanden nodg waren
+Hier komen alle "fixes" waarbij geen aanpassingen aan de bestanden nodig waren
 (maar wel bijvoorbeeld een aanpassing aan de instellingen)
 
 fixes #5: een noreply adres toegevoegd
+fixes #16: vertalingen
