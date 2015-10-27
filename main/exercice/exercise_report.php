@@ -6,7 +6,7 @@
  * 	@author Julio Montoya <gugli100@gmail.com> jqgrid integration
  *   Modified by hubert.borderiou (question category)
  *
- *  @todo fix excel export
+ *  @todo fix excel export - also fix #4
  *
  */
 
