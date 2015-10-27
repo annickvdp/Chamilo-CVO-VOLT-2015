@@ -184,7 +184,7 @@ function save_item(
                         error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false), 0);
                     }
                 }
-            } elseif ($status == 'completed' && $max > 0 && ($score/$max) < 0.8) {
+            } elseif ($status == 'completed' && $max > 0 && ($score/$max) < 0.5) {
                 $myStatus = 'failed';
                 if ($debug > 1) {
                     error_log('Calling set_status('.$myStatus.') for hotpotatoes', 0);
