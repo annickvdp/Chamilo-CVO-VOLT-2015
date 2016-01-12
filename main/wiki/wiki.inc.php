@@ -4375,7 +4375,8 @@ class Wiki
             Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
 
         if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit() ||
-            GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
+            GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id()) ||
+			(self::check_protect_page()==0 && self::check_visibility_page() == 1 && !($page == "index"))
         ) {
             // menu edit page
 
