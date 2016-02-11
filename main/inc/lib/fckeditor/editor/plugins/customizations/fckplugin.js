@@ -520,7 +520,7 @@ FCK.GetNamedCommandState = function( commandName )
     {
 
         // Bug #50 : Safari never returns positive state for the Paste command, override that.
-        if ( FCKBrowserInfo.IsSafari && FCK.EditorWindow && commandName.IEquals( 'Paste' ) )
+        if ( (FCKBrowserInfo.IsSafari || FCKBrowserInfo.IsGecko) && FCK.EditorWindow && commandName.IEquals( 'Paste' ) )
             return FCK_TRISTATE_OFF ;
 
         if ( !FCK.EditorDocument.queryCommandEnabled( commandName ) )
