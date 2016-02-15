@@ -32,10 +32,27 @@ $this_section = SECTION_MYAGENDA;
 
 if (!empty($GLOBALS['_cid']) && $GLOBALS['_cid'] != -1) {
     // Agenda is inside a course tool
+	// Little hack to sort the events by start date in personal agenda (Agenda events List view - See #8014)
+    usort($events, function($a, $b) {
+        $t1 = strtotime($a['start']);
+        $t2 = strtotime($b['start']);
+        return $t1 - $t2;
+    });
+    $url = false;
+    foreach ($events as &$event) {
+        $event['url'] = api_get_self() . '?cid=' . $event['course_id'] .
+        '&type=' . $event['type'];
+    }
     $url = api_get_self() . '?' . api_get_cidreq();
     $this_section = SECTION_COURSES;
 } else {
     // Agenda is out of the course tool (e.g personal agenda)
+	// Little hack to sort the events by start date in personal agenda (Agenda events List view - See #8014)
+    usort($events, function($a, $b) {
+        $t1 = strtotime($a['start']);
+        $t2 = strtotime($b['start']);
+        return $t1 - $t2;
+    });
     $url = false;
     foreach ($events as &$event) {
         $event['url'] = api_get_self() . '?cid=' . $event['course_id'] .
