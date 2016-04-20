@@ -250,6 +250,7 @@ $form->addGroup($group, '', array(get_lang("DropboxEmailAlert")), '');
 
 $group = array();
 $group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
+$group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailOpenQuestions'), 2);
 $group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("QuizEmailAlert")), '');
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');

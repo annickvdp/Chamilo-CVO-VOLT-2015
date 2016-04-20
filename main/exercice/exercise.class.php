@@ -3654,26 +3654,12 @@ class Exercise
         $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.$sessionId.'&id='.$exe_id.'&action=qualify';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
-        $msg = '<p>'.get_lang('ExerciseAttempted').' :</p>
-                    <p>'.get_lang('AttemptDetails').' : </p>
-                    <table class="data_table">
-                        <tr>
-                            <td><h3>'.get_lang('CourseName').'</h3></td>
-                            <td><h3>#course#</h3></td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('TestAttempted').'</span></td>
-                            <td>#exercise#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentName').'</td>
-                            <td>#firstName# #lastName#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentEmail').'</td>
-                            <td>#email#</td>
-                        </tr>
-                    </table>';
+        $msg = '<p>'.get_lang('ExerciseAttempted').'<br />
+				'.get_lang('AttemptDetails').' : </p>
+                <p><b>'.get_lang('CourseName').': #course#</b><br />
+                '.get_lang('TestAttempted').': #exercise#<br />
+				'.get_lang('StudentName').': #firstName# #lastName#<br />
+                '.get_lang('StudentEmail').': #email#</p>';
         $open_question_list = null;
 
         $msg = str_replace("#email#", $user_info['email'], $msg);
@@ -3683,8 +3669,8 @@ class Exercise
         $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
         if ($origin != 'learnpath') {
-            $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
-                        <a href="#url#">#url#</a>';
+            $msg.= '<p>'.get_lang('ClickToCommentAndGiveFeedback').', <br />
+                        <a href="#url#">#url#</a></p>';
         }
         $msg1 = str_replace("#url#", $url_email, $msg);
         $mail_content = $msg1;
@@ -3713,7 +3699,10 @@ class Exercise
      */
     function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
     {
-        // Email configuration settings
+        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 2 ) {
+            return null;
+        }
+		// Email configuration settings
         $courseCode     = api_get_course_id();
         $courseInfo    = api_get_course_info($courseCode);
 		$sessionId 		= api_get_session_id();
@@ -3721,26 +3710,12 @@ class Exercise
         $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq2().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
-        $msg = '<p>'.get_lang('OpenQuestionsAttempted').' :</p>
-                    <p>'.get_lang('AttemptDetails').' : </p>
-                    <table class="data_table">
-                        <tr>
-                            <td><h3>'.get_lang('CourseName').'</h3></td>
-                            <td><h3>#course#</h3></td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('TestAttempted').'</span></td>
-                            <td>#exercise#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentName').'</td>
-                            <td>#firstName# #lastName#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentEmail').'</td>
-                            <td>#mail#</td>
-                        </tr>
-                    </table>';
+        $msg = '<p>'.get_lang('OpenQuestionsAttempted').'<br />
+				'.get_lang('AttemptDetails').' : </p>
+                <p><b>'.get_lang('CourseName').': #course#</b><br />
+                '.get_lang('TestAttempted').': #exercise#<br />
+				'.get_lang('StudentName').': #firstName# #lastName#<br />
+                '.get_lang('StudentEmail').': #mail#</p>';
         $open_question_list = null;
         foreach ($question_list_answers as $item) {
             $question    = $item['question'];
@@ -3800,7 +3775,10 @@ class Exercise
 
     function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id)
     {
-        // Email configuration settings
+        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 2 ) {
+            return null;
+        }
+		// Email configuration settings
         $courseCode     = api_get_course_id();
         $course_info    = api_get_course_info($courseCode);
 
