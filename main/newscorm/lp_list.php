@@ -111,15 +111,15 @@ if (!empty($flat_list)) {
     echo '<tr>';
 
     if ($is_allowed_to_edit) {
-        echo '<th width="35%">'.get_lang('Title').'</th>';
+        echo '<th width="35%" style="text-align: left">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('PublicationDate').'</th>';
         echo '<th>'.get_lang('ExpirationDate').'</th>';
         echo '<th>'.get_lang('Progress')."</th>";
         echo '<th width="300px">'.get_lang('AuthoringOptions')."</th>";
     } else {
-        echo '<th width="50%">'.get_lang('Title').'</th>';
+        echo '<th width="75%" style="text-align: left">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('Progress')."</th>";
-        echo '<th>'.get_lang('Actions')."</th>";
+        echo '<th width="1%"></th>';
     }
     echo '</tr>';
 
@@ -438,9 +438,6 @@ if (!empty($flat_list)) {
                 $start_time = $end_time = '';
             }
         } else {
-            // Student
-            $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.
-                Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
         }
 
         global $_configuration;
