@@ -445,16 +445,6 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/qti2.php?'.api_get_cidreq().'">'.Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/aiken.php?'.api_get_cidreq().'">'.Display :: return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/upload_exercise.php?'.api_get_cidreq().'">'.Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo Display::url(
-        Display::return_icon(
-            'clean_all.png',
-            get_lang('CleanAllStudentsResultsForAllTests'), '', ICON_SIZE_MEDIUM),
-            '',
-            array(
-                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
-                'href' => api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
-            )
-    );
 }
 
 if ($is_allowedToEdit) {
@@ -519,13 +509,13 @@ if (!empty($exercise_list)) {
 
         if ($is_allowedToEdit) {
             $headers = array(
-                array('name' => get_lang('ExerciseName')),
+                array('name' => get_lang('ExerciseName'), 'params' => array('align' => 'left')),
                 array('name' => get_lang('QuantityQuestions'), 'params' => array('width' => '100px')),
                 array('name' => get_lang('Actions'), 'params' => array('width' => '180px')));
         } else {
             $headers = array(
-                array('name' => get_lang('ExerciseName')),
-                array('name' => get_lang('Status')),
+                array('name' => get_lang('ExerciseName'), 'params' => array('align' => 'left')),
+                array('name' => get_lang('Status'), 'params' => array('width' => '300px')),
             );
             if ($isDrhOfCourse) {
                 $headers[] = array(
@@ -752,7 +742,7 @@ if (!empty($exercise_list)) {
                 //Attempts
                 //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
                 //$item .=  Display::tag('td',$attempts);
-                $item .= Display::tag('td', $number_of_questions);
+                $item .= Display::tag('td align="center"', $number_of_questions);
             } else {
                 // Student only.
                 $visibility = api_get_item_visibility($courseInfo, TOOL_QUIZ, $my_exercise_id);
@@ -872,7 +862,7 @@ if (!empty($exercise_list)) {
                     $num = '<span class="tooltip" style="display: none;">'.$num.'</span>';
                 }
 
-                $item .= Display::tag('td', $attempt_text);
+                $item .= Display::tag('td align="center"', $attempt_text);
             }
 
             $class = 'row_even';
@@ -881,7 +871,7 @@ if (!empty($exercise_list)) {
             }
 
             if ($is_allowedToEdit) {
-                $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
+                $item .= Display::tag('td align="center"', $actions, array('class' => 'td_actions'));
             } else {
                 if ($isDrhOfCourse) {
                     $actions ='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
