@@ -224,12 +224,12 @@ class AnnouncementManager
                 global $stok;
 
                 $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&origin=" . (!empty($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '') . "&action=showhide&id=" . $announcement_id . "&sec_token=" . $stok . "\">" .
-                    Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
+                        Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
 
                 if (api_is_allowed_to_edit(false, true)) {
                     $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete&id=" . $announcement_id . "&sec_token=" . $stok . "\" onclick=\"javascript:if(!confirm('" . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)) . "')) return false;\">" .
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) .
-                        "</a>";
+                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) .
+                            "</a>";
                 }
                 echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";
             }
@@ -522,8 +522,8 @@ class AnnouncementManager
     }
 
     /**
-     * @param int $announcementId
-     */
+    * @param int $announcementId
+    */
     public static function addAnnouncementToAllUsersInSessions($announcementId)
     {
         $courseCode = api_get_course_id();
@@ -566,10 +566,10 @@ class AnnouncementManager
         if ($insert_id != strval(intval($insert_id))) {
             return false;
         }
-        $insert_id = intval($insert_id);
+        $insert_id = Database::escape_string($insert_id);
         $course_id = api_get_course_int_id();
         // store the modifications in the table tbl_annoucement
-        $sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE c_id = $course_id AND id = $insert_id";
+        $sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE c_id = $course_id AND id='$insert_id'";
         Database::query($sql);
     }
 
@@ -710,7 +710,7 @@ class AnnouncementManager
      */
     public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
     {
-        echo '<select id="not_selected_form" name="not_selected_form[]" size="7" class="span4" multiple>';
+        echo '<select name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
         if ($group_list) {
             foreach ($group_list as $this_group) {
@@ -720,7 +720,7 @@ class AnnouncementManager
                         $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled" ;
                         echo "<option $user_disabled value=\"GROUP:" . $this_group['id'] . "\">",
                         "G: ", $this_group['name'], " - " . $this_group['userNb'] . " " . $user_label .
-                            "</option>";
+                        "</option>";
                     }
                 }
             }
@@ -786,14 +786,14 @@ class AnnouncementManager
                         if (!is_array($to_already_selected) || !in_array("GROUP:" . $this_group['id'], $to_already_selected)) { // $to_already_selected is the array containing the groups (and users) that are already selected
                             echo "<option value=\"GROUP:" . $this_group['id'] . "\">",
                             "G: ", $this_group['name'], " &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-                                "</option>";
+                            "</option>";
                         }
                     }
                 }
                 // adding the individual users to the select form
                 foreach ($ref_array_users as $this_user) {
                     if (!is_array($to_already_selected) || !in_array("USER:" . $this_user['user_id'], $to_already_selected)) { // $to_already_selected is the array containing the users (and groups) that are already selected
-                        echo "<option value=\"USER:", $this_user['user_id'], "\"  title='" . sprintf(get_lang('LoginX'), $this_user['username']) . "'>",
+                        echo "<option value=\"USER:", $this_user['user_id'], "\"  title='" . sprintf(get_lang('LoginX'), $user['username']) . "'>",
                         "", api_get_person_name($this_user['firstname'], $this_user['lastname']),
                         "</option>";
                     }
@@ -873,10 +873,10 @@ class AnnouncementManager
     {
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
-        $id = intval($id);
+        $id = Database::escape_string($id);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $tbl_item_property WHERE c_id = $course_id AND tool='$tool' AND ref = $id";
+        $sql = "SELECT * FROM $tbl_item_property WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $to_group = $row['to_group_id'];
@@ -1138,7 +1138,7 @@ class AnnouncementManager
                 $safe_new_file_name = Database::escape_string($new_file_name);
                 // Storing the attachments if any
                 $sql = 'INSERT INTO ' . $tbl_announcement_attachment . ' (c_id, filename, comment, path, announcement_id, size) ' .
-                    "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
+                        "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
                 $result = Database::query($sql);
                 $return = 1;
             }
@@ -1197,7 +1197,7 @@ class AnnouncementManager
 
     /**
      * This function delete a attachment file by id
-     * @param integer $id attachment file Id
+     * @param integer attachment file Id
      *
      */
     public static function delete_announcement_attachment_file($id)
@@ -1209,13 +1209,9 @@ class AnnouncementManager
         Database::query($sql);
     }
 
-    /**
-     * @param int $id
-     * @param bool $sendToUsersInSession
-     */
-    public static function send_email($id, $sendToUsersInSession = false)
+    public static function send_email($annoucement_id, $sendToUsersInSession = false)
     {
-        $email = AnnouncementEmail::create(null, $id);
+        $email = AnnouncementEmail::create(null, $annoucement_id);
         $email->send($sendToUsersInSession);
     }
 }

@@ -857,8 +857,7 @@ if ($display_announcement_list) {
             // => see all the messages of all the users and groups without editing possibilities
 
             if (isset($isStudentView) and $isStudentView=="true") {
-                $sql="SELECT
-					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+                $sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
 					WHERE	announcement.c_id = $course_id AND
 							ip.c_id = $course_id AND
@@ -983,13 +982,14 @@ if ($display_announcement_list) {
             $iterator = 1;
             $bottomAnnouncement = $announcement_number;
 
-            echo '<table width="100%" class="data_table announcements-list">';
-            $ths = Display::tag('th', get_lang('Title'));
-            $ths .= Display::tag('th', get_lang('By') );
-            $ths .= Display::tag('th', get_lang('LastUpdateDate') );
+            echo '<table width="100%" class="data_table announcements-list" cellpadding="5" >';
+            $ths = Display::tag('th align="left" width="31%"', get_lang('Title'));
+            $ths .= Display::tag('th align="left" width="12%"', get_lang('By') );
+			$ths .= Display::tag('th align="left" width="25%"', get_lang('To') );
+			$ths .= Display::tag('th align="left" width="15%"', get_lang('LastUpdateDate') );
             if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))
                 OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-                $ths .= Display::tag('th', get_lang('Modify'));
+                $ths .= Display::tag('th width="12%"', get_lang('Modify'));
             }
 
             echo Display::tag('tr', $ths);
@@ -1037,7 +1037,17 @@ if ($display_announcement_list) {
                     $username       = sprintf(get_lang("LoginX"), $user_info['username']);
                     $username_span  = Display::tag('span', api_get_person_name($user_info['firstName'], $user_info['lastName']), array('title'=>$username));
                     echo Display::tag('td', $username_span, array('class' => 'announcements-list-line-by-user'));
-                    echo Display::tag('td', api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_LONG), array('class' => 'announcements-list-line-datetime'));
+					
+            		$sent_to_list = array();
+					$sent_to_list = AnnouncementManager::sent_to('announcement',$myrow['id']);
+            		$sent_to_form = AnnouncementManager::sent_to_form($sent_to_list);
+                    echo '<td class="announcements-list-line-by-user">'.substr($sent_to_form,0,45).' ';
+						if (strlen($sent_to_form) > 45) {
+							echo '...';
+							}
+						'</td>';					
+					
+                    echo Display::tag('td', api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_SHORT), array('class' => 'announcements-list-line-datetime'));
 
                     // we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
                     $modify_icons = '';
@@ -1072,7 +1082,7 @@ if ($display_announcement_list) {
                                 "</a>";
                         }
                         $iterator ++;
-                        echo Display::tag('td', $modify_icons, array('class' => 'announcements-list-line-actions'));
+                        echo Display::tag('td align="center"', $modify_icons, array('class' => 'announcements-list-line-actions'));
                     }
                     echo "</tr>";
                 }
