@@ -806,7 +806,7 @@ if ($display_announcement_list) {
 
     //$is_group_member = GroupManager :: is_tutor(api_get_user_id());
 
-    if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+    if (api_is_allowed_to_edit(false,true))  {
         // A.1. you are a course admin with a USER filter
         // => see only the messages of this specific user + the messages of the group (s)he is member of.
         if (!empty($_SESSION['user'])) {
@@ -987,8 +987,7 @@ if ($display_announcement_list) {
             $ths .= Display::tag('th align="left" width="12%"', get_lang('By') );
 			$ths .= Display::tag('th align="left" width="25%"', get_lang('To') );
 			$ths .= Display::tag('th align="left" width="15%"', get_lang('LastUpdateDate') );
-            if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))
-                OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))) {
                 $ths .= Display::tag('th width="12%"', get_lang('Modify'));
             }
 
@@ -1049,12 +1048,13 @@ if ($display_announcement_list) {
 					
                     echo Display::tag('td', api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_SHORT), array('class' => 'announcements-list-line-datetime'));
 
-                    // we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
+                    
                     $modify_icons = '';
-                    if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id']))
-                        OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-
+					
+					// we can edit, remove, move if : we are the teacher OR the element belongs to the session we are coaching 
+                    if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id']))) {
                         $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL)."</a>";
+						
                         if ($myrow['visibility']==1) {
                             $image_visibility="visible";
                             $alt_visibility=get_lang('Hide');
@@ -1081,9 +1081,11 @@ if ($display_announcement_list) {
                                 Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).
                                 "</a>";
                         }
+						
                         $iterator ++;
-                        echo Display::tag('td align="center"', $modify_icons, array('class' => 'announcements-list-line-actions'));
-                    }
+                        echo Display::tag('td align="center"', $modify_icons, array('class' => 'announcements-list-line-actions'));             
+                     
+					} 
                     echo "</tr>";
                 }
                 $displayed[]=$myrow['id'];

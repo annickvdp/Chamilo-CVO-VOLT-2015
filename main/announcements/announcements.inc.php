@@ -212,7 +212,7 @@ class AnnouncementManager
             echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
             echo "<tr><td><h2>" . $title . "</h2></td></tr>";
 
-            if (api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            if (api_is_allowed_to_edit(false, true)) {
                 $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $announcement_id . "\">" . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
                 if ($result['visibility'] == 1) {
                     $image_visibility = "visible";
