@@ -35,7 +35,7 @@ return array(
 	'czech' =>            array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'danish' =>           array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'dari' =>             array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
-	'dutch' =>            array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
+	'dutch' =>            array('format' => 'title last_name first_name',  'sort_by' => 'last_name'),
 	'english' =>          array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'esperanto' =>        array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'estonian' =>         array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
