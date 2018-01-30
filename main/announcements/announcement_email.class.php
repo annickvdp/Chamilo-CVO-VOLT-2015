@@ -223,7 +223,9 @@ class AnnouncementEmail
      */
     public function message($receiverUserId)
     {
-        $content = $this->announcement('content');
+        $title = $this->announcement('title');
+		$content = $this->announcement('content');
+		$content = '<p><b>Aankondiging: '.$title.'</b></p>'.$content;
         $session_id = $this->session_id;
 
         $content = AnnouncementManager::parse_content(
