@@ -62,7 +62,7 @@ class Notification extends Model
         // Default no-reply email
         $this->adminEmail = api_get_setting('noreply_email_address');
         $this->adminName = api_get_setting('siteName');
-        $this->titlePrefix = '['.api_get_setting('siteName').'] ';
+        $this->titlePrefix = '';
 
         // If no-reply email doesn't exist use the admin name/email
         if (empty($this->adminEmail)) {
