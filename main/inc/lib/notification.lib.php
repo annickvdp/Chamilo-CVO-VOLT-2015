@@ -120,7 +120,7 @@ class Notification extends Model
                     Security::filter_terms($item_to_send['title']),
                     Security::filter_terms($item_to_send['content']),
                     $this->adminName,
-                    $this->adminEmail
+                    $senderInfo['email']
                 );
                 if ($this->debug) {
                     error_log('Sending message to: '.$item_to_send['dest_mail']);
@@ -277,7 +277,7 @@ class Notification extends Model
                                 Security::filter_terms($titleToNotification),
                                 Security::filter_terms($content),
                                 $this->adminName,
-                                $this->adminEmail,
+                                $senderInfo['email'],
                                 $extraHeaders
                             );
                         }
