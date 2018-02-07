@@ -259,7 +259,7 @@ class AnnouncementEmail
             $this->sender('lastName'),
             PERSON_NAME_EMAIL_ADDRESS
         );
-        $result .= '<a href="mailto:'.$user_email.'">'.$sender_name.'</a><br/>';
+       
         $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$course_param.'">'.$course_name.'</a><br/>';
 
         return $result;
