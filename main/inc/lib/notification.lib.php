@@ -7,6 +7,7 @@
  * Include/require it in your code to use its features.
  * @package chamilo.library
  */
+ 
 class Notification extends Model
 {
     public $table;
@@ -262,15 +263,18 @@ class Notification extends Model
                     case self::NOTIFY_MESSAGE_AT_ONCE:
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
-
-                        $extraHeaders = array(
+					
+					// sender OR recipient is CVO VOLT
+				   
+					if ( strpos($senderInfo['email'], '@cvovolt.be') == true
+						 or strpos($userInfo['email'], '@cvovolt.be') == true )  {
+						$extraHeaders = array(
                             'reply_to' => array(
                                 'name' => $senderInfo['complete_name'],
                                 'mail' => $senderInfo['email']
-                            )
-                        );
-
-                        if (!empty($userInfo['email'])) {
+                            	)
+                        	);
+						if (!empty($userInfo['email'])) {
                             api_mail_html(
                                 $userInfo['complete_name'],
                                 $userInfo['mail'],
@@ -281,8 +285,32 @@ class Notification extends Model
                                 $extraHeaders
                             );
                         }
-                        $sendDate = api_get_utc_datetime();
-                }
+					}
+					
+					 // sender is NOT CVO VOLT and recipient is STUDENT
+					 else {
+						$extraHeaders = array(
+                            'reply_to' => array(
+                                'name' => $senderInfo['complete_name'],
+                                'mail' => 'noreply@cvovolt.be'
+                            	)
+                        	);
+						if (!empty($userInfo['email'])) {
+                            api_mail_html(
+                                $userInfo['complete_name'],
+                                $userInfo['mail'],
+                                Security::filter_terms($titleToNotification),
+                                Security::filter_terms($content),
+                                $this->adminName,
+                                $this->adminEmail,
+                                $extraHeaders
+                            );
+                        }
+						 
+					 }
+                   	
+                    $sendDate = api_get_utc_datetime();
+			  }
 
                 // Saving the notification to be sent some day.
                 $params = array(
