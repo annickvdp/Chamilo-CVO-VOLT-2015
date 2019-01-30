@@ -753,9 +753,9 @@ if ($category != '0') {
                 $stud_id
             );
             if (!empty($certificate)) {
-                echo '<div class="actions" align="right">';
-                echo $certificate['pdf_link'];
-                echo '</div>';
+               // echo '<div class="actions" align="right">';
+               // echo $certificate['pdf_link'];
+               // echo '</div>';
             }
         }
     }
