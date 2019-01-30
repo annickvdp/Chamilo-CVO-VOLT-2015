@@ -454,9 +454,9 @@ class DisplayGradebook
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
                 $certificateLink = null;
-                if (!empty($certificateLinkInfo) && isset($certificateLinkInfo['certificate_link'])) {
+                /* if (!empty($certificateLinkInfo) && isset($certificateLinkInfo['certificate_link'])) {
                     $certificateLink .= '<span style="float:right"> ' . $certificateLinkInfo['certificate_link']."</span>";
-                }
+                } */
                 $scoreinfo .= '<h4>' . get_lang('Total') . ' : ' . $scorecourse_display . $certificateLink. '</h4>';
 
             }
