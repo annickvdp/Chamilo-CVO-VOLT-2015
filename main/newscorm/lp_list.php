@@ -378,6 +378,7 @@ if (!empty($flat_list)) {
             }
 
             // Copy
+		/*
             $copy = Display::url(
                 Display::return_icon(
                     'cd_copy.png',
@@ -387,6 +388,7 @@ if (!empty($flat_list)) {
                 ),
                 api_get_self() . "?" . api_get_cidreq() . "&action=copy&lp_id=$id"
             );
+	    	*/
 
             /* Auto Lunch LP code */
             if (api_get_course_setting('enable_lp_auto_launch') == 1) {
