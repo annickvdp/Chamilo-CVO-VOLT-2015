@@ -1373,7 +1373,7 @@ class CourseManager
         $extra_field = array(),
         $courseCodeList = array(),
         $userIdList = array(),
-        $filterByActive = null
+        $filterByActive = 1
     ) {
         // variable initialisation
         $session_id = intval($session_id);
