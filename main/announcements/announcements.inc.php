@@ -649,7 +649,7 @@ class AnnouncementManager
 
         // the form containing all the groups and all the users of the course
         echo '<td>';
-        echo "<strong>" . get_lang('Users') . "</strong><br />";
+        echo "<strong>" . get_lang('Users') . "</strong><br /><span style='color:red'>Inactieve cursisten worden niet getoond.</span><br />";
 
         self::construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
         echo "</td>";
